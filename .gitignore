@@ -1,0 +1,15 @@
+# Ignorar todo por defecto
+*
+
+# Incluir solo archivos del portfolio
+!Portfolio.html
+!servicio.html
+!servicio-video.html
+!servicio-social.html
+!proyecto.html
+!tweaks-panel.jsx
+!src/
+!src/**
+!assets/
+!assets/**
+!.gitignore

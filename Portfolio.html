@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FACU PERES · Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#0E0E10;
+  --surface:#17171b;
+  --surface-2:#202026;
+  --ink:#F4F3F0;
+  --ink-soft:#8a8a92;
+  --hair:#ffffff14;
+  --accent:#98E245;
+  --blue:#2087E4; --green:#98E245; --cyan:#ADE6ED; --orange:#FE572A; --violet:#C9A8FF;
+  --font:'Archivo', system-ui, sans-serif;
+  --serif:'Instrument Serif', Georgia, serif;
+  --mono:'Space Mono', monospace;
+  --ph2-bg:#1c1c21; --ph2-line:#232329;
+  --pad:clamp(18px,5vw,72px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+em{font-family:var(--serif);font-style:italic;font-weight:400}
+.mono2{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
+.sec-h{font-family:var(--font);font-weight:800;font-size:clamp(28px,4.4vw,58px);letter-spacing:-.02em;line-height:1;display:flex;align-items:baseline;gap:16px}
+.sec-h__n{font-size:12px !important;color:var(--accent) !important}
+
+/* ---------- placeholder ---------- */
+.ph2{position:relative;width:100%;overflow:hidden;background:var(--ph2-bg);border:1px solid var(--hair);display:flex;align-items:flex-end}
+.ph2__s{position:absolute;inset:0;opacity:.6}
+.ph2__tag{position:relative;z-index:1;margin:12px;padding:5px 9px;background:#0e0e10cc;color:var(--ink-soft);font-family:var(--mono);font-size:10px;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--hair);border-radius:3px}
+
+/* ---------- nav ---------- */
+.nav2{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:16px var(--pad);transition:background .3s,backdrop-filter .3s,padding .3s,border-color .3s;border-bottom:1px solid transparent}
+.nav2--sc{background:#0e0e10cc;backdrop-filter:blur(12px);padding-top:11px;padding-bottom:11px;border-bottom:1px solid var(--hair)}
+.nav2__brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;letter-spacing:.01em}
+.nav2__dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
+.nav2__mid{display:none}
+.nav2__links{display:flex;align-items:center;gap:4px}
+.nav2__links button{padding:8px 13px;font-size:13px;font-weight:500;border-radius:100px;transition:color .2s,background .2s;color:var(--ink-soft);white-space:nowrap}
+.nav2__links button:hover{color:var(--ink)}
+.nav2__cta{border:1px solid var(--hair) !important;color:var(--ink) !important}
+.nav2__cta:hover{background:var(--accent);color:#0E0E10 !important;border-color:var(--accent) !important}
+
+/* ---------- hero ---------- */
+.hero2{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px var(--pad) 70px;overflow:hidden}
+.hero2__inner{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;gap:22px;pointer-events:none}
+.hero2__eyebrow{opacity:0;animation:up .7s .1s both}
+.hero2__name{font-weight:900;font-size:clamp(72px,19vw,280px);line-height:.82;letter-spacing:-.04em;text-transform:uppercase}
+.hero2__word{display:block;opacity:0;animation:up .9s both;animation-delay:calc(.2s + var(--i)*.12s)}
+.hero2__word:last-child{color:var(--ink);-webkit-text-stroke:0}
+.hero2__role{max-width:44ch;font-size:clamp(14px,1.5vw,18px);color:var(--ink-soft);line-height:1.5;text-wrap:pretty;opacity:0;animation:up .8s .6s both}
+.hero2__role em{color:var(--ink)}
+.hero2__scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:5;
+  padding:9px 16px;border:1px solid var(--hair);border-radius:100px;transition:background .25s,color .25s,border-color .25s;opacity:0;animation:upcenter .8s 1s both}
+.hero2__scroll:hover{background:var(--ink);color:#0E0E10;border-color:var(--ink)}
+@keyframes upcenter{from{opacity:0;transform:translate(-50%,26px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+
+/* ---------- stickers ---------- */
+.stickers{position:absolute;inset:0;z-index:8;pointer-events:none}
+[data-stickers="off"] .stickers{display:none}
+.stk{position:absolute;pointer-events:auto;cursor:grab;user-select:none;touch-action:none;
+  transform:rotate(var(--rot));transition:transform .15s cubic-bezier(.2,.8,.2,1),box-shadow .18s;
+  box-shadow:0 8px 22px #0008;opacity:1;animation:pop .55s .7s backwards}
+.stk:hover{transform:rotate(0deg) scale(1.08)}
+.stk--press{transition:transform .07s ease}
+.stk--drag{cursor:grabbing;transition:none;box-shadow:0 18px 44px #000a;z-index:999}
+.stk--svc{cursor:pointer}
+.stk--chip{padding:14px 26px;border-radius:100px;font-weight:800;font-size:18px;white-space:nowrap}
+.stk__arrow{opacity:.55}
+.stk--badge{width:62px;height:62px;border-radius:50%;display:grid;place-items:center}
+.stk__ico{display:grid;place-items:center}
+@keyframes pop{0%{opacity:0;transform:rotate(var(--rot)) scale(.4)}70%{transform:rotate(var(--rot)) scale(1.12)}100%{opacity:1;transform:rotate(var(--rot)) scale(1)}}
+
+/* ---------- services / folders ---------- */
+.services{padding:clamp(60px,9vw,120px) 0 clamp(50px,7vw,90px)}
+.services__head{display:flex;flex-wrap:wrap;gap:14px;align-items:baseline;justify-content:space-between;padding:0 var(--pad);margin-bottom:38px}
+.services__hint{max-width:24ch;text-align:right}
+.services__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,1.8vw,26px);padding:10px var(--pad) 0}
+
+.folder{position:relative;padding-top:32px;text-align:left;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.folder__tab{position:absolute;top:0;left:18px;min-width:46%;padding:8px 20px 10px;background:var(--fc);color:#0E0E10;
+  font-weight:800;font-size:13px;letter-spacing:.02em;border-radius:11px 11px 0 0;text-transform:uppercase}
+.folder__body{display:flex;flex-direction:column;gap:11px;min-height:212px;padding:24px;
+  background:var(--surface);border:1px solid var(--hair);border-radius:2px 14px 14px 14px;position:relative;overflow:hidden}
+.folder__body::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--fc);opacity:.9}
+.folder__count{color:var(--fc) !important}
+.folder__label{font-weight:800;font-size:clamp(20px,2vw,26px);letter-spacing:-.02em;line-height:1.05;margin-top:2px}
+.folder__desc{font-size:13px;color:var(--ink-soft);line-height:1.45;flex:1}
+.folder__open{color:var(--ink) !important;font-weight:700;transition:gap .2s}
+.folder:hover{transform:translateY(-10px) rotate(-1deg)}
+.folder:hover .folder__body{border-color:var(--fc);box-shadow:0 18px 44px #0009, 0 0 0 1px var(--fc) inset}
+
+/* ---------- work / projects ---------- */
+.work2{padding:clamp(20px,4vw,40px) var(--pad) clamp(70px,9vw,120px)}
+.work2__head{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;
+  margin-bottom:46px;border-bottom:1px solid var(--hair);padding-bottom:22px}
+.chip-filter{display:flex;align-items:center;gap:9px;padding:8px 14px;border-radius:100px;background:var(--surface);
+  border:1px solid var(--fc);font-size:13px;font-weight:600;transition:background .2s}
+.chip-filter:hover{background:var(--surface-2)}
+.chip-filter__dot{width:9px;height:9px;border-radius:50%;background:var(--fc)}
+.chip-filter__x{color:var(--ink-soft);font-size:11px}
+.work2__tools{display:flex;align-items:center;gap:16px}
+.work2__hint{font-size:11px}
+.arrows{display:flex;gap:12px;justify-content:center;padding:26px var(--pad) 0}
+.arrow{width:52px;height:52px;border-radius:50%;border:1px solid var(--ink-soft);color:var(--ink);font-size:19px;display:grid;place-items:center;transition:background .2s,color .2s,border-color .2s,transform .15s}
+.arrow:hover{background:var(--accent);color:#0E0E10;border-color:var(--accent)}
+.arrow:active{transform:scale(.92)}
+.rail-vp{overflow:hidden;padding:4px 0 22px;cursor:grab}
+.rail-vp:active{cursor:grabbing}
+.rail-track{display:flex;gap:28px;width:max-content;padding:0 var(--pad);will-change:transform;animation:railslide var(--rail-dur,55s) linear infinite;touch-action:pan-y}
+.rail-vp[data-auto="off"] .rail-track{animation:none}
+@keyframes railslide{from{transform:translateX(0)}to{transform:translateX(calc(-1 * var(--period,2000px)))}}
+.dots{display:flex;gap:8px;justify-content:center;padding:6px var(--pad) 0}
+.dot{width:26px;height:6px;border-radius:3px;background:var(--surface-2);border:1px solid var(--hair);transition:background .25s,width .25s}
+.dot:hover{background:var(--ink-soft)}
+.dot--on{background:var(--accent);border-color:var(--accent);width:40px}
+.card2{flex:0 0 clamp(290px,42vw,460px);display:flex;flex-direction:column;gap:15px;user-select:none}
+.card2__media{position:relative;overflow:hidden;border-radius:6px}
+.card2__media .ph2{transition:transform .6s cubic-bezier(.2,.7,.2,1);border-radius:6px}
+.card2:hover .card2__media .ph2{transform:scale(1.04)}
+.card2__img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block;border-radius:6px;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.card2--link{text-decoration:none;color:inherit}
+.card2--link:hover .card2__img{transform:scale(1.04)}
+.card2__open{position:absolute;left:14px;bottom:14px;background:var(--fc);color:#0E0E10 !important;padding:7px 13px;border-radius:100px;font-weight:700;opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s}
+.card2--link:hover .card2__open{opacity:1;transform:translateY(0)}
+.card2__num{position:absolute;top:12px;left:12px;background:#0e0e10cc;border:1px solid var(--hair);padding:4px 9px;border-radius:4px;color:var(--ink) !important;font-size:10px !important}
+.card2__meta{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.card2__title{font-weight:800;font-size:clamp(20px,2.2vw,30px);letter-spacing:-.02em;line-height:1}
+.card2__sub{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex:0 0 auto}
+.tag2{padding:5px 11px;border-radius:100px;background:transparent;border:1px solid var(--fc);color:var(--fc);
+  font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.empty{padding:40px 0;text-align:center}
+
+/* ---------- about ---------- */
+.about2{padding:clamp(70px,9vw,120px) var(--pad);border-top:1px solid var(--hair);display:flex;flex-direction:column;gap:36px}
+.about2__grid{display:grid;grid-template-columns:minmax(300px,440px) 1fr;gap:clamp(32px,6vw,84px);align-items:center;margin-top:6px}
+.about2__photo{position:relative}
+.about2__photo img{width:100%;display:block;border-radius:10px;border:1px solid var(--hair);filter:grayscale(1) contrast(1.04)}
+.about2__cap{position:absolute;left:13px;bottom:13px;background:#0e0e10cc;padding:6px 10px;border:1px solid var(--hair);border-radius:5px}
+.about2__col{display:flex;flex-direction:column;gap:34px}
+.about2__lead{font-family:var(--font);font-weight:600;font-size:clamp(26px,3.6vw,50px);line-height:1.14;letter-spacing:-.02em;max-width:18ch;text-wrap:balance}
+.about2__tags{list-style:none;display:flex;flex-wrap:wrap;gap:11px}
+.about2__tags li{padding:10px 18px;border-radius:100px;border:1px solid var(--fc);color:var(--fc);font-weight:600;font-size:14px;white-space:nowrap}
+
+/* ---------- contact ---------- */
+.contact2{padding:clamp(70px,9vw,120px) var(--pad) 40px;border-top:1px solid var(--hair);display:flex;flex-direction:column;align-items:flex-start;gap:26px}
+.contact2__big{font-weight:900;font-size:clamp(48px,11vw,150px);line-height:.9;letter-spacing:-.03em;text-transform:uppercase;margin-top:8px}
+.contact2__big em{text-transform:none;color:var(--accent)}
+.contact2__mail{font-family:var(--serif);font-style:italic;font-size:clamp(26px,4vw,52px);border-bottom:2px solid var(--accent);padding-bottom:3px;transition:color .2s}
+.contact2__mail:hover{color:var(--accent)}
+.contact2__links{display:flex;flex-wrap:wrap;gap:22px}
+.contact2__links a{font-size:13px !important;transition:color .2s}
+.contact2__links a:hover{color:var(--accent) !important}
+.footer2{width:100%;display:flex;justify-content:space-between;border-top:1px solid var(--hair);padding-top:20px;margin-top:34px}
+
+/* ---------- responsive ---------- */
+@media(max-width:900px){
+  .about2__grid{grid-template-columns:1fr}
+  .about2__photo{max-width:380px}
+  .services__grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(min-width:760px){ .nav2__mid{display:block} }
+@media(max-width:560px){
+  .nav2__links button:not(.nav2__cta){display:none}
+  .stk--badge{width:46px;height:46px}
+  .stk--chip{font-size:12px;padding:7px 13px}
+  .services__grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero2__word,.hero2__eyebrow,.hero2__role,.hero2__scroll,.stk{animation:none !important;opacity:1 !important}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- data -->
+<script>
+window.FACU = {
+  name: "FACU PERES",
+  handle: "/FACU.ZIP",
+  role: "Diseñador gráfico & multimedia",
+  tagline: "Branding, motion y dirección de arte para marcas que quieren destacar.",
+  about:
+    "Soy Facu, diseñador gráfico enfocado en identidad, motion y contenido digital. Construyo sistemas visuales claros y con onda.",
+  email: "facuperes26@gmail.com",
+  socials: [
+    { label: "Instagram", url: "https://www.instagram.com/zarpado.estudio/" },
+    { label: "Behance", url: "https://www.behance.net/facuperes" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/facundo-peres-0b6795152/" },
+  ],
+  services: [
+    { id: "branding", label: "Branding e Identidad", short: "Branding", color: "#2087E4", count: 0, desc: "Logotipos, sistemas visuales y guías de marca." },
+    { id: "video",    label: "Edición de Videos",    short: "Edición",  color: "#FE572A", count: 0, desc: "Edición, motion graphics y reels." },
+    { id: "web",      label: "Diseño Web",           short: "Web",      color: "#98E245", count: 0, desc: "Landing pages, portfolios y UI." },
+    { id: "social",   label: "Redes y Anuncios",     short: "Social",   color: "#ADE6ED", count: 0, desc: "Contenido para redes, campañas y ads." },
+  ],
+  projects: [
+    {
+      id: "p1", title: "Club Niche", service: "branding", year: "2026", feat: true,
+      slot: "Identidad / Club Niche",
+      cover: "assets/niche/niche-1.png",
+      tags: ["Identidad visual", "Indumentaria", "Dirección de arte"],
+      intro: "Identidad visual para una marca de ropa urbana.",
+    },
+    {
+      id: "p2", title: "Semi Amargo", service: "branding", year: "2026", feat: true,
+      slot: "Identidad / Semi Amargo",
+      cover: "assets/semiamargo/sa-1.png",
+      tags: ["Identidad visual", "Cafetería", "Packaging"],
+      intro: "Identidad para una cafetería urbana de café y helado.",
+    },
+    {
+      id: "p9b", title: "Symbic", service: "branding", year: "2026", feat: true,
+      slot: "Identidad / Symbic",
+      cover: "assets/symbic/sb-cover.png",
+      tags: ["Identidad visual", "Ropa urbana", "Streetwear"],
+      intro: "Identidad para una marca de ropa urbana.",
+    },
+    {
+      id: "p3", title: "Lenay Coffee", service: "branding", year: "2026", feat: false,
+      slot: "Identidad / Lenay Coffee",
+      cover: "assets/lenay/lenay-1.png",
+      tags: ["Identidad visual", "Cafetería", "Ilustración"],
+    },
+    {
+      id: "p5", title: "Aura", service: "branding", year: "2026", feat: false,
+      slot: "Identidad / Aura",
+      cover: "assets/aura/aura-1.png",
+      tags: ["Identidad visual", "Pilates", "Iconografía"],
+    },
+    {
+      id: "p4", title: "The Comms", service: "branding", year: "2026", feat: false,
+      slot: "Identidad / The Comms",
+      cover: "assets/thecomms/tc-1.png",
+      tags: ["Identidad visual", "Agencia digital", "Branding"],
+    },
+    {
+      id: "p6", title: "The Brothers", service: "branding", year: "2026", feat: false,
+      slot: "Identidad / The Brothers",
+      cover: "assets/brothers/brother-1.png",
+      tags: ["Identidad visual", "Chocolate", "Packaging"],
+    },
+    {
+      id: "p7", title: "Café y Seguridad a Bordo", service: "web", year: "2026", feat: true,
+      slot: "Web / Café y Seguridad a Bordo",
+      cover: "assets/cafe/cafe-cover.png",
+      tags: ["Diseño web", "Aviación", "Landing"],
+      intro: "Sitio web para una escuela de aviación.",
+    },
+    {
+      id: "p8b", title: "Groven Ads", service: "web", year: "2026", feat: false,
+      slot: "Landing / Groven Ads",
+      cover: "assets/groven/groven-portada.png",
+      tags: ["Diseño web", "Landing page", "Marketing digital"],
+    },
+    {
+      id: "bbang", title: "Briefbang", service: "web", year: "2026", feat: false,
+      slot: "Landing / Briefbang",
+      cover: "assets/briefbang/bb-portada.png",
+      tags: ["Diseño web", "Landing page", "Marketing digital"],
+    },
+    { id: "p10", title: "Campaña Ritmo",  service: "social", year: "2025", feat: false, slot: "Social / Campaña Ritmo" },
+    { id: "p11", title: "Ads Bloom",      service: "social", year: "2024", feat: false, slot: "Anuncios / Bloom" },
+  ],
+};
+window.FACU.services.forEach((s) => {
+  s.count = window.FACU.projects.filter((p) => p.service === s.id).length;
+});
+</script>
+
+<!-- tweaks panel -->
+<script type="text/babel">
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s,box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel"
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" onMouseDown={(e) => e.stopPropagation()} onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+function TweakSection({ label }) {
+  return <div className="twk-sect">{label}</div>;
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+
+function TweakColor({ label, value, options, onChange }) {
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <div className="twk-row">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <div className="twk-chips">
+        {options.map((o, i) => {
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" data-on={on ? '1' : '0'}
+                    style={{ background: o }} onClick={() => onChange(o)}>
+              {on && (
+                <svg viewBox="0 0 14 14">
+                  <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
+                        strokeLinecap="round" strokeLinejoin="round"
+                        stroke={__twkIsLight(o) ? 'rgba(0,0,0,.78)' : '#fff'} />
+                </svg>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { useTweaks, TweaksPanel, TweakSection, TweakToggle, TweakColor });
+</script>
+
+<!-- stickers -->
+<script type="text/babel">
+const { useState: useS, useEffect: useE, useRef: useR } = React;
+
+const Ico = {
+  cursor: (
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round">
+      <path d="M5 3l6 16 2.2-6.2L19 10.5z" fill="currentColor" stroke="none" /></svg>
+  ),
+  pen: (
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round">
+      <path d="M12 2.5l5.5 12H6.5z" /><line x1="12" y1="14.5" x2="12" y2="21.5" /><circle cx="12" cy="21.5" r="1.5" fill="currentColor" stroke="none" /></svg>
+  ),
+  pencil: (
+    <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round">
+      <path d="M4 20l1-4L16 5l3 3L8 19z" /><line x1="14" y1="7" x2="17" y2="10" /></svg>
+  ),
+  bucket: (
+    <svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round">
+      <path d="M4 8.5l8-4 7.5 7.5-8 4z" /><path d="M4 8.5c0 1.5 11.5 7 15.5 3.5" /><path d="M20 15c1.3 1.5 1.3 3.2 0 4.2-1 .8-2.4 0-2-1.4.3-1 1.2-1.9 2-2.8z" fill="currentColor" stroke="none" /></svg>
+  ),
+  play: (
+    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M7 4l13 8-13 8z" fill="currentColor" /></svg>
+  ),
+  grid: (
+    <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" strokeWidth="2">
+      <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+      <rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></svg>
+  ),
+};
+
+const STICKERS = [
+  { id: "c_branding", kind: "chip", text: "Branding e Identidad", service: "branding", color: "#2087E4", dark: true, x: 12, y: 30, rot: -8 },
+  { id: "c_web",      kind: "chip", text: "Diseño web",          service: "web",      color: "#98E245", x: 8,  y: 47, rot: 6 },
+  { id: "c_video",    kind: "chip", text: "Edición de video",     service: "video",    color: "#FE572A", dark: true, x: 70, y: 23, rot: 7 },
+  { id: "c_social",   kind: "chip", text: "Redes y anuncios",    service: "social",   color: "#ADE6ED", x: 72, y: 66, rot: -9 },
+  { id: "b_cursor",   kind: "badge", icon: "cursor", color: "#2087E4", x: 86, y: 42, rot: 0 },
+  { id: "b_pen",      kind: "badge", icon: "pen",    color: "#ADE6ED", x: 22, y: 66, rot: -6 },
+  { id: "b_pencil",   kind: "badge", icon: "pencil", color: "#C9A8FF", x: 30, y: 17, rot: 4 },
+  { id: "b_bucket",   kind: "badge", icon: "bucket", color: "#98E245", x: 88, y: 78, rot: 8 },
+  { id: "b_play",     kind: "badge", icon: "play",   color: "#FE572A", x: 15, y: 83, rot: -4 },
+  { id: "b_grid",     kind: "badge", icon: "grid",   color: "#ADE6ED", x: 91, y: 14, rot: 0 },
+];
+
+const SKEY = "facu_stickers_v3";
+
+function StickerLayer({ onFilter }) {
+  const layerRef = useR(null);
+  const [pos, setPos] = useS({});
+  const [z, setZ] = useS(50);
+  const drag = useR(null);
+
+  useE(() => {
+    const el = layerRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    let saved = {};
+    try { saved = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) {}
+    const next = {};
+    STICKERS.forEach((s) => {
+      if (saved[s.id]) next[s.id] = { x: saved[s.id].x, y: saved[s.id].y, z: 50 };
+      else next[s.id] = { x: (s.x / 100) * r.width, y: (s.y / 100) * r.height, z: 50 };
+    });
+    setPos(next);
+  }, []);
+
+  const persist = (next) => {
+    try {
+      const out = {};
+      Object.keys(next).forEach((k) => (out[k] = { x: next[k].x, y: next[k].y }));
+      localStorage.setItem(SKEY, JSON.stringify(out));
+    } catch (e) {}
+  };
+
+  const onDown = (e, s) => {
+    e.preventDefault();
+    const p = pos[s.id];
+    const nz = z + 1;
+    setZ(nz);
+    drag.current = { id: s.id, def: s, dx: e.clientX - p.x, dy: e.clientY - p.y, moved: 0 };
+    setPos((prev) => ({ ...prev, [s.id]: { ...prev[s.id], z: nz, pressed: true } }));
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  };
+  const onMove = (e) => {
+    const dd = drag.current;
+    if (!dd) return;
+    const r = layerRef.current.getBoundingClientRect();
+    let x = Math.max(-12, Math.min(e.clientX - dd.dx, r.width - 44));
+    let y = Math.max(-12, Math.min(e.clientY - dd.dy, r.height - 30));
+    dd.moved += Math.abs(e.movementX) + Math.abs(e.movementY);
+    setPos((prev) => ({ ...prev, [dd.id]: { ...prev[dd.id], x, y, pressed: true, dragging: dd.moved > 6 } }));
+  };
+  const onUp = () => {
+    const dd = drag.current;
+    window.removeEventListener("pointermove", onMove);
+    window.removeEventListener("pointerup", onUp);
+    if (dd) {
+      setPos((prev) => {
+        const next = { ...prev, [dd.id]: { ...prev[dd.id], pressed: false, dragging: false } };
+        persist(next);
+        return next;
+      });
+      if (dd.moved <= 6 && dd.def.service && onFilter) onFilter(dd.def.service);
+    }
+    drag.current = null;
+  };
+
+  return (
+    <div className="stickers" ref={layerRef}>
+      {STICKERS.map((s) => {
+        const p = pos[s.id] || { x: 0, y: 0, z: 50 };
+        const cls = "stk stk--" + s.kind + (p.dragging ? " stk--drag" : "") + (p.pressed ? " stk--press" : "") + (s.service ? " stk--svc" : "");
+        let transform;
+        if (p.dragging) transform = "rotate(0deg) scale(1.06)";
+        else if (p.pressed) transform = "rotate(" + s.rot + "deg) scale(.86)";
+        const style = {
+          left: p.x, top: p.y, zIndex: p.z, "--rot": s.rot + "deg",
+          background: s.color, color: s.dark ? "#fff" : "#0E0E10",
+        };
+        if (transform) style.transform = transform;
+        return (
+          <div key={s.id} className={cls} style={style} onPointerDown={(e) => onDown(e, s)}
+               title={s.service ? "Ver " + s.text : "Arrastrame"}>
+            {s.kind === "chip" ? (
+              <span className="stk__txt">{s.text}{s.service ? <span className="stk__arrow"> →</span> : null}</span>
+            ) : (
+              <span className="stk__ico">{Ico[s.icon]}</span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+Object.assign(window, { StickerLayer });
+</script>
+
+<!-- sections -->
+<script type="text/babel">
+const { useState: useSec, useEffect: useEf, useRef: useRf } = React;
+
+function PH({ label, ratio = "4 / 5", i = 0 }) {
+  return (
+    <div className="ph2" style={{ aspectRatio: ratio }} role="img" aria-label={label}>
+      <svg className="ph2__s" width="100%" height="100%" preserveAspectRatio="none">
+        <defs>
+          <pattern id={"d" + i} width="16" height="16" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+            <rect width="16" height="16" fill="var(--ph2-bg)" />
+            <rect width="8" height="16" fill="var(--ph2-line)" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill={"url(#d" + i + ")"} />
+      </svg>
+      <span className="ph2__tag">{label}</span>
+    </div>
+  );
+}
+
+function Nav2({ d, onNav }) {
+  const [sc, setSc] = useSec(false);
+  useEf(() => {
+    const f = () => setSc(window.scrollY > 30);
+    window.addEventListener("scroll", f, { passive: true });
+    return () => window.removeEventListener("scroll", f);
+  }, []);
+  return (
+    <header className={"nav2" + (sc ? " nav2--sc" : "")}>
+      <button className="nav2__brand" onClick={() => onNav("top")}>
+        <span className="nav2__dot" /> {d.name}
+      </button>
+      <span className="nav2__mid mono2">{d.handle}</span>
+      <nav className="nav2__links">
+        <button onClick={() => onNav("work")}>Trabajos</button>
+        <button onClick={() => onNav("about")}>Sobre mí</button>
+        <button className="nav2__cta" onClick={() => onNav("contact")}>Contacto</button>
+      </nav>
+    </header>
+  );
+}
+
+function Hero2({ d, onNav, onFilter }) {
+  return (
+    <section className="hero2" id="top">
+      <StickerLayer onFilter={onFilter} />
+      <div className="hero2__inner">
+        <span className="hero2__eyebrow mono2">Portfolio · Vol. 1 · 2025</span>
+        <h1 className="hero2__name">
+          {d.name.split(" ").map((w, i) => (
+            <span className="hero2__word" style={{ "--i": i }} key={i}>{w}</span>
+          ))}
+        </h1>
+        <p className="hero2__role">{d.role}</p>
+      </div>
+      <button className="hero2__scroll mono2" onClick={() => onNav("services")}>
+        Explorá los servicios ↓
+      </button>
+    </section>
+  );
+}
+
+function Folder({ s, onClick }) {
+  return (
+    <button className="folder" style={{ "--fc": s.color }} onClick={() => onClick(s.id)}>
+      <span className="folder__tab">{s.short}</span>
+      <span className="folder__body">
+        <span className="folder__label">{s.label}</span>
+        <span className="folder__desc">{s.desc}</span>
+        <span className="folder__open mono2">Abrir carpeta →</span>
+      </span>
+    </button>
+  );
+}
+
+function FolderSlider({ services, onOpen }) {
+  return (
+    <section className="services" id="services">
+      <div className="services__head">
+        <h2 className="sec-h">
+          <span className="sec-h__n mono2">( 01 )</span> Servicios
+        </h2>
+        <span className="mono2 services__hint">Tocá una carpeta para abrirla</span>
+      </div>
+      <div className="services__grid">
+        {services.map((s) => (
+          <Folder key={s.id} s={s} onClick={onOpen} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Projects({ d, auto }) {
+  const vpRef = useRf(null);
+  const trackRef = useRf(null);
+  const dragState = useRf({ down: false, moved: 0, sx: 0, baseX: 0 });
+  const feat = d.projects.filter((p) => p.feat);
+  const shown = [...feat, ...feat];
+  const GAP = 28;
+
+  const getX = () => {
+    const t = getComputedStyle(trackRef.current).transform;
+    if (!t || t === "none") return 0;
+    try { return new DOMMatrixReadOnly(t).m41; } catch (e) { return 0; }
+  };
+  const periodPx = () => {
+    const tr = trackRef.current;
+    const N = feat.length;
+    const cards = tr.children;
+    if (cards.length > N) return cards[N].offsetLeft - cards[0].offsetLeft;
+    return (tr.scrollWidth - GAP) / 2;
+  };
+  const resumeFrom = (x) => {
+    const tr = trackRef.current;
+    const P = periodPx();
+    let nx = x % P; if (nx > 0) nx -= P;
+    const D = parseFloat(getComputedStyle(tr).animationDuration) || 55;
+    const f = P ? -nx / P : 0;
+    tr.style.transition = "none";
+    tr.style.transform = "";
+    tr.style.animation = "none";
+    void tr.offsetWidth;
+    tr.style.animation = "";
+    tr.style.animationDelay = (-(f * D)) + "s";
+  };
+
+  useEf(() => {
+    const tr = trackRef.current;
+    if (!tr) return;
+    const apply = () => {
+      const N = feat.length;
+      const cards = tr.children;
+      const P = cards.length > N ? (cards[N].offsetLeft - cards[0].offsetLeft) : (tr.scrollWidth - GAP) / 2;
+      tr.style.setProperty("--period", P + "px");
+      tr.style.setProperty("--rail-dur", Math.max(24, P / 36) + "s");
+    };
+    apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(tr);
+    tr.querySelectorAll("img").forEach((im) => { if (!im.complete) im.addEventListener("load", apply, { once: true }); });
+    return () => ro.disconnect();
+  }, []);
+
+  const onPointerDown = (e) => {
+    const tr = trackRef.current;
+    const s = dragState.current;
+    s.down = true; s.moved = 0; s.sx = e.clientX; s.baseX = getX();
+    tr.style.transition = "none";
+    tr.style.animation = "none";
+    tr.style.transform = "translateX(" + s.baseX + "px)";
+    const move = (ev) => {
+      if (!s.down) return;
+      s.moved += Math.abs(ev.movementX || 0);
+      tr.style.transform = "translateX(" + (s.baseX + (ev.clientX - s.sx)) + "px)";
+    };
+    const up = () => {
+      s.down = false;
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      resumeFrom(getX());
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  };
+
+  const nudge = (dir) => {
+    const tr = trackRef.current;
+    const card = tr.querySelector(".card2");
+    const step = (card ? card.offsetWidth : 420) + GAP;
+    const to = getX() - dir * step;
+    tr.style.animation = "none";
+    tr.style.transition = "transform .5s cubic-bezier(.2,.7,.2,1)";
+    tr.style.transform = "translateX(" + to + "px)";
+    window.clearTimeout(tr.__nudgeT);
+    tr.__nudgeT = window.setTimeout(() => { tr.style.transition = "none"; resumeFrom(getX()); }, 520);
+  };
+
+  return (
+    <section className="work2" id="work">
+      <div className="work2__head">
+        <h2 className="sec-h">
+          <span className="sec-h__n mono2">( 02 )</span> Proyectos destacados
+        </h2>
+        <span className="work2__hint mono2">Arrastrá o usá las flechas</span>
+      </div>
+
+      <div className="rail-vp" ref={vpRef} data-auto={auto ? "on" : "off"}>
+        <div className="rail-track" ref={trackRef} onPointerDown={onPointerDown}>
+          {shown.map((p, i) => {
+            const svc2 = d.services.find((s) => s.id === p.service);
+            const media = (
+              <div className="card2__media">
+                {p.cover
+                  ? <img className="card2__img" src={p.cover} alt={p.title} loading="lazy" draggable="false" />
+                  : <PH label={p.slot} ratio="3 / 2" i={i} />}
+                <span className="card2__open mono2">Ver proyecto →</span>
+              </div>
+            );
+            const meta = (
+              <div className="card2__meta">
+                <h3 className="card2__title">{p.title}</h3>
+                <div className="card2__sub">
+                  <span className="tag2" style={{ "--fc": svc2.color }}>{svc2.short}</span>
+                  <span className="mono2">{p.year}</span>
+                </div>
+              </div>
+            );
+            return (
+              <a className="card2 card2--link" key={p.id + i} href={"proyecto.html?p=" + p.id}
+                 style={{ "--fc": svc2.color }}
+                 onClick={(e) => { if (dragState.current.moved > 6) e.preventDefault(); }}
+                 draggable="false">
+                {media}{meta}
+              </a>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="arrows">
+        <button className="arrow" onClick={() => nudge(-1)} aria-label="Anterior">←</button>
+        <button className="arrow" onClick={() => nudge(1)} aria-label="Siguiente">→</button>
+      </div>
+    </section>
+  );
+}
+
+function About2({ d }) {
+  return (
+    <section className="about2" id="about">
+      <span className="sec-h__n mono2">( 03 ) Sobre mí</span>
+      <div className="about2__grid">
+        <div className="about2__photo">
+          <img src="assets/facu.jpg" alt="Facu Peres" loading="lazy"
+               onError={(e) => { e.target.style.display='none'; }} />
+          <span className="about2__cap mono2">Facu Peres · 2025</span>
+        </div>
+        <div className="about2__col">
+          <p className="about2__lead">{d.about}</p>
+          <ul className="about2__tags">
+            {d.services.map((s) => (
+              <li key={s.id} style={{ "--fc": s.color }}>{s.label}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Contact2({ d }) {
+  return (
+    <section className="contact2" id="contact">
+      <span className="sec-h__n mono2">( 04 ) Contacto</span>
+      <h2 className="contact2__big">Hagamos algo<br /><em>juntos.</em></h2>
+      <a className="contact2__mail" href={"mailto:" + d.email}>{d.email}</a>
+      <div className="contact2__links">
+        {d.socials.map((s) => (
+          <a key={s.label} href={s.url} className="mono2" target="_blank" rel="noopener noreferrer">{s.label} ↗</a>
+        ))}
+      </div>
+      <footer className="footer2 mono2">
+        <span>© 2026 {d.name}</span>
+        <span>{d.handle}</span>
+      </footer>
+    </section>
+  );
+}
+
+Object.assign(window, { PH, Nav2, Hero2, Folder, FolderSlider, Projects, About2, Contact2 });
+</script>
+
+<!-- app -->
+<script type="text/babel">
+const { useState: useApp2, useEffect: useEff2 } = React;
+
+const T2_DEFAULTS = {
+  "bg": "#0E0E10",
+  "accent": "#98E245",
+  "stickers": true,
+  "marquee": true
+};
+
+function scrollToId(id) {
+  if (id === "top") return window.scrollTo({ top: 0, behavior: "smooth" });
+  const el = document.getElementById(id);
+  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 16, behavior: "smooth" });
+}
+
+function App2() {
+  const [t, setTweak] = useTweaks(T2_DEFAULTS);
+  const d = window.FACU;
+
+  useEff2(() => {
+    const r = document.documentElement;
+    r.style.setProperty("--bg", t.bg);
+    r.style.setProperty("--accent", t.accent);
+    r.setAttribute("data-stickers", t.stickers ? "on" : "off");
+  }, [t]);
+
+  const openService = (id) => {
+    let href = "servicio.html?s=" + encodeURIComponent(id);
+    if (id === "video") href = "servicio-video.html";
+    if (id === "social") href = "servicio-social.html";
+    window.location.href = href;
+  };
+
+  return (
+    <React.Fragment>
+      <Nav2 d={d} onNav={scrollToId} />
+      <main>
+        <Hero2 d={d} onNav={scrollToId} onFilter={openService} />
+        <FolderSlider services={d.services} onOpen={openService} />
+        <Projects d={d} auto={t.marquee} />
+        <About2 d={d} />
+        <Contact2 d={d} />
+      </main>
+
+      <TweaksPanel>
+        <TweakSection label="Tema" />
+        <TweakColor label="Fondo" value={t.bg}
+          options={["#0E0E10", "#101418", "#14110E", "#0A0A0A", "#161221"]}
+          onChange={(v) => setTweak("bg", v)} />
+        <TweakColor label="Acento" value={t.accent}
+          options={["#98E245", "#2087E4", "#FE572A", "#ADE6ED", "#C9A8FF"]}
+          onChange={(v) => setTweak("accent", v)} />
+        <TweakSection label="Interacción" />
+        <TweakToggle label="Stickers en el hero" value={t.stickers}
+          onChange={(v) => setTweak("stickers", v)} />
+        <TweakToggle label="Carpetas en movimiento" value={t.marquee}
+          onChange={(v) => setTweak("marquee", v)} />
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App2 />);
+</script>
+</body>
+</html>

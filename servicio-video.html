@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Edición de Videos · FACU PERES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#0E0E10; --surface:#17171b; --surface-2:#202026;
+  --ink:#F4F3F0; --ink-soft:#8a8a92; --hair:#ffffff14;
+  --accent:#FE572A; --fc:#FE572A;
+  --font:'Archivo', system-ui, sans-serif; --serif:'Instrument Serif', Georgia, serif; --mono:'Space Mono', monospace;
+  --pad:clamp(18px,5vw,72px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+em{font-family:var(--serif);font-style:italic}
+.mono2{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* nav */
+.nav2{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:15px var(--pad);background:#0e0e10cc;backdrop-filter:blur(12px);border-bottom:1px solid var(--hair)}
+.back{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px}
+.back__arrow{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--hair);transition:background .2s,color .2s}
+.back:hover .back__arrow{background:var(--ink);color:#0E0E10}
+.nav2__home{font-size:13px;font-weight:600;color:var(--ink-soft);transition:color .2s}
+.nav2__home:hover{color:var(--ink)}
+
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:9px;padding:26px var(--pad) 0}
+.tab{padding:9px 16px;border-radius:100px;border:1px solid var(--hair);font-size:13px;font-weight:600;color:var(--ink-soft);transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--ink);border-color:var(--ink-soft)}
+.tab--on{background:var(--tc);border-color:var(--tc);color:#0E0E10}
+
+/* header */
+.shead{padding:30px var(--pad) clamp(30px,4vw,48px);display:flex;flex-direction:column;gap:18px;border-bottom:1px solid var(--hair)}
+.shead__tag{align-self:flex-start;padding:9px 19px;background:var(--fc);color:#0E0E10;font-weight:800;font-size:13px;letter-spacing:.02em;border-radius:100px}
+.shead__title{font-weight:900;font-size:clamp(46px,9vw,128px);line-height:.9;letter-spacing:-.03em}
+.shead__row{display:flex;flex-wrap:wrap;gap:14px 40px;align-items:baseline;justify-content:space-between}
+.shead__left{display:flex;flex-wrap:wrap;align-items:center;gap:16px 22px}
+.shead__btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:100px;background:var(--fc);color:#0E0E10;font-weight:800;font-size:14px;white-space:nowrap;transition:transform .2s}
+.shead__btn:hover{transform:translateY(-2px)}
+.shead__desc{max-width:46ch;font-size:clamp(15px,1.6vw,19px);color:var(--ink-soft);line-height:1.5;text-wrap:pretty}
+.shead__count{color:var(--fc) !important;font-size:12px !important}
+
+/* video section */
+.vsec{padding:clamp(40px,6vw,72px) 0 clamp(30px,4vw,50px)}
+.vsec + .vsec{border-top:1px solid var(--hair)}
+.vsec__head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px 18px;justify-content:space-between;padding:0 var(--pad);margin-bottom:30px}
+.vsec__h{display:flex;align-items:baseline;gap:14px}
+.vsec__h h2{font-weight:800;font-size:clamp(26px,3.4vw,46px);letter-spacing:-.02em;line-height:1}
+.vsec__n{color:var(--fc) !important}
+.vsec__hint{font-size:11px}
+
+/* 4-up grid (one row, no slider) */
+.vrail{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,24px);padding:4px var(--pad) 6px}
+.vcard{display:flex;flex-direction:column;gap:11px;min-width:0}
+.vcard__media{position:relative;aspect-ratio:9/16;overflow:hidden;border-radius:10px;border:1px solid var(--hair);background:#000;cursor:pointer}
+.vcard__media video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.vcard__media--yt{background-size:cover;background-position:center}
+.vcard__yt{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.vcard__media--yt .vcard__play{display:none}
+.vcard__spin{position:absolute;top:12px;left:12px;width:18px;height:18px;border-radius:50%;border:2px solid #ffffff44;border-top-color:#fff;opacity:0;animation:vspin .7s linear infinite;pointer-events:none}
+.vcard__media video.is-loading ~ .vcard__spin{opacity:1}
+@keyframes vspin{to{transform:rotate(360deg)}}
+.vcard__play{position:absolute;inset:0;margin:auto;width:56px;height:56px;border-radius:50%;background:#0e0e10cc;border:1px solid var(--hair);display:grid;place-items:center;font-size:19px;line-height:1;opacity:0;transition:opacity .2s,transform .15s,background .2s;backdrop-filter:blur(4px);pointer-events:none}
+.vcard__media:hover .vcard__play{opacity:1}
+.vcard__play.is-paused{opacity:1}
+.vcard__media:hover .vcard__play{background:var(--fc);color:#0E0E10;border-color:var(--fc)}
+.vcard__play.is-paused{background:#0e0e10cc;color:var(--ink);border-color:var(--hair)}
+.vcard__sound{position:absolute;right:10px;bottom:10px;width:38px;height:38px;border-radius:50%;background:#0e0e10cc;border:1px solid var(--hair);display:grid;place-items:center;font-size:14px;backdrop-filter:blur(4px);transition:background .2s,transform .15s;opacity:0}
+.vcard__media:hover .vcard__sound{opacity:1}
+.vcard__sound:hover{background:var(--fc);color:#0E0E10;border-color:var(--fc)}
+.vcard__sound:active{transform:scale(.9)}
+.vcard__meta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 2px}
+.vcard__label{font-weight:700;font-size:14px}
+.vcard__year{font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-transform:uppercase}
+
+/* arrows centered below */
+.varrows{display:flex;gap:12px;justify-content:center;padding:24px var(--pad) 0}
+.varrow{width:52px;height:52px;border-radius:50%;border:1px solid var(--ink-soft);color:var(--ink);font-size:19px;display:grid;place-items:center;transition:background .2s,color .2s,border-color .2s,transform .15s}
+.varrow:hover{background:var(--fc);color:#0E0E10;border-color:var(--fc)}
+.varrow:active{transform:scale(.92)}
+.varrow.is-off{opacity:.3}
+.varrow.is-off:hover{background:transparent;color:var(--ink);border-color:var(--ink-soft)}
+
+/* cta + footer */
+.cta{padding:clamp(50px,7vw,90px) var(--pad);border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.cta__big{font-weight:900;font-size:clamp(32px,5vw,68px);line-height:.95;letter-spacing:-.02em}
+.cta__big em{color:var(--accent);text-transform:none}
+.cta__btn{padding:15px 26px;border-radius:100px;background:var(--accent);color:#0E0E10;font-weight:800;font-size:15px;transition:transform .2s}
+.cta__btn--ghost{background:transparent;border:1px solid var(--hair);color:var(--ink)}
+.cta__btns{display:flex;flex-wrap:wrap;gap:12px}
+.cta__btn:hover{transform:translateY(-2px)}
+.footer2{display:flex;justify-content:space-between;padding:22px var(--pad);border-top:1px solid var(--hair)}
+
+@media(max-width:760px){ .vrail{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:600px){ .nav2__home{display:none} }
+</style>
+</head>
+<body>
+<nav class="nav2">
+  <a class="back" href="Portfolio.html#services">
+    <span class="back__arrow">←</span> FACU PERES
+  </a>
+  <a class="nav2__home mono2" href="Portfolio.html">Volver al portfolio</a>
+</nav>
+
+<div class="tabs" id="tabs"></div>
+<header class="shead" id="shead"></header>
+
+<main id="sections"></main>
+
+<section class="cta">
+  <h2 class="cta__big">¿Necesitás un editor<br />para <em>tus videos?</em></h2>
+  <div class="cta__btns">
+    <a class="cta__btn" href="Portfolio.html#contact">Hablemos →</a>
+    <a class="cta__btn cta__btn--ghost" href="https://drive.google.com/drive/u/0/folders/1C2Vik8uUbocH_p-RECH8cahNYNN4CJV2" target="_blank" rel="noopener">Ver más ediciones ↗</a>
+  </div>
+</section>
+<footer class="footer2 mono2">
+  <span>© 2026 FACU PERES</span>
+  <span>/FACU.ZIP</span>
+</footer>
+
+<script src="src/data2.js"></script>
+<script>
+(function () {
+  const d = window.FACU;
+  const svc = d.services.find((s) => s.id === "video");
+
+  document.documentElement.style.setProperty("--fc", svc.color);
+  document.documentElement.style.setProperty("--accent", svc.color);
+
+  // tabs (video routes here, others to servicio.html)
+  document.getElementById("tabs").innerHTML = d.services.map((s) => {
+    let href = "servicio.html?s=" + s.id;
+    if (s.id === "video") href = "servicio-video.html";
+    if (s.id === "social") href = "servicio-social.html";
+    return '<a class="tab' + (s.id === "video" ? " tab--on" : "") + '" style="--tc:' + s.color + '" href="' + href + '">' + s.label + "</a>";
+  }).join("");
+
+  // header
+  const total = d.videos.redes.length + d.videos.anuncios.length;
+  document.getElementById("shead").innerHTML =
+    '<span class="shead__tag">' + svc.short + "</span>" +
+    '<h1 class="shead__title">' + svc.label + "</h1>" +
+    '<div class="shead__row">' +
+      '<div class="shead__left">' +
+        '<p class="shead__desc">' + svc.desc + "</p>" +
+        '<a class="shead__btn" href="https://drive.google.com/drive/u/0/folders/1C2Vik8uUbocH_p-RECH8cahNYNN4CJV2" target="_blank" rel="noopener">Carpeta de videos ↗</a>' +
+      "</div>" +
+      '<span class="shead__count mono2">' + String(total).padStart(2, "0") + " videos</span>" +
+    "</div>";
+
+  function vcard(v, label) {
+    if (v.youtube) {
+      const id = v.youtube;
+      const poster = "https://i.ytimg.com/vi/" + id + "/oardefault.jpg";
+      return '<article class="vcard">' +
+        '<div class="vcard__media vcard__media--yt" data-yt="' + id + '" style="background-image:url(' + poster + ')">' +
+          '<span class="vcard__spin" aria-hidden="true"></span>' +
+          '<span class="vcard__play" aria-hidden="true">▶</span>' +
+          '<button class="vcard__sound" aria-label="Sonido" title="Activar sonido">🔇</button>' +
+        "</div>" +
+        '<div class="vcard__meta"><span class="vcard__label">' + label + "</span></div>" +
+      "</article>";
+    }
+    const poster = "assets/video/posters/" + v.src.split("/").pop().replace(/\.mp4$/, ".jpg");
+    return '<article class="vcard">' +
+      '<div class="vcard__media">' +
+        '<video data-src="' + v.src + '" poster="' + poster + '" muted loop playsinline preload="none" disablepictureinpicture controlslist="nodownload noplaybackrate nofullscreen"></video>' +
+        '<span class="vcard__spin" aria-hidden="true"></span>' +
+        '<span class="vcard__play" aria-hidden="true">▶</span>' +
+        '<button class="vcard__sound" aria-label="Sonido" title="Activar sonido">🔇</button>' +
+      "</div>" +
+      '<div class="vcard__meta"><span class="vcard__label">' + label + "</span></div>" +
+    "</article>";
+  }
+
+  function ytSrc(id, muted) {
+    return "https://www.youtube-nocookie.com/embed/" + id +
+      "?autoplay=1&mute=" + (muted ? 1 : 0) + "&loop=1&playlist=" + id +
+      "&controls=" + (muted ? 0 : 1) + "&modestbranding=1&rel=0&playsinline=1";
+  }
+  function mountYT(media, muted) {
+    const id = media.dataset.yt;
+    let f = media.querySelector("iframe");
+    if (!f) {
+      f = document.createElement("iframe");
+      f.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
+      f.setAttribute("allowfullscreen", "");
+      f.setAttribute("frameborder", "0");
+      f.className = "vcard__yt";
+      media.appendChild(f);
+    }
+    f.src = ytSrc(id, muted);
+  }
+
+  function section(idx, n, title, list, labelPrefix) {
+    const cards = list.map((v, i) => vcard(v, labelPrefix + " " + String(i + 1).padStart(2, "0"))).join("");
+    return '<section class="vsec">' +
+      '<div class="vsec__head">' +
+        '<div class="vsec__h"><span class="vsec__n mono2">( ' + n + " )</span><h2>" + title + "</h2></div>" +
+      "</div>" +
+      '<div class="vrail" id="rail' + idx + '">' + cards + "</div>" +
+    "</section>";
+  }
+
+  document.getElementById("sections").innerHTML =
+    section(0, "01", "Videos para Redes Sociales", d.videos.redes, "Reel") +
+    section(1, "02", "Videos para Anuncios", d.videos.anuncios, "Ad");
+
+  // --- play / pause ---
+  function setPlayUI(vid) {
+    const ov = vid.parentElement.querySelector(".vcard__play");
+    if (!ov) return;
+    if (vid.paused) { ov.textContent = "▶"; ov.classList.add("is-paused"); }
+    else { ov.textContent = "⏸"; ov.classList.remove("is-paused"); }
+  }
+  function toggle(vid) {
+    if (vid.paused) { delete vid.dataset.userpaused; vid.play().catch(() => {}); }
+    else { vid.dataset.userpaused = "1"; vid.pause(); }
+  }
+  document.querySelectorAll(".vcard__media").forEach((m) => {
+    if (m.dataset.yt) {
+      // YouTube card: click toggles sound + full player
+      m.addEventListener("click", (e) => {
+        if (e.target.closest(".vcard__sound")) return;
+        const btn = m.querySelector(".vcard__sound");
+        const on = m.classList.toggle("is-sound");
+        mountYT(m, !on);
+        if (btn) btn.textContent = on ? "🔊" : "🔇";
+      });
+      return;
+    }
+    const vid = m.querySelector("video");
+    m.addEventListener("click", (e) => {
+      if (e.target.closest(".vcard__sound")) return; // sound button handles itself
+      toggle(vid);
+    });
+  });
+  document.querySelectorAll(".vcard video").forEach((v) => {
+    v.addEventListener("play", () => setPlayUI(v));
+    v.addEventListener("pause", () => setPlayUI(v));
+    setPlayUI(v);
+  });
+
+  // --- sound toggle ---
+  document.querySelectorAll(".vcard__sound").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const media = btn.parentElement;
+      if (media.dataset.yt) {
+        const on = media.classList.toggle("is-sound");
+        mountYT(media, !on);
+        btn.textContent = on ? "🔊" : "🔇";
+        return;
+      }
+      const vid = media.querySelector("video");
+      // mute all others first
+      document.querySelectorAll(".vcard video").forEach((o) => {
+        if (o !== vid) { o.muted = true; const b = o.parentElement.querySelector(".vcard__sound"); if (b) b.textContent = "🔇"; }
+      });
+      vid.muted = !vid.muted;
+      if (!vid.muted) { delete vid.dataset.userpaused; vid.play().catch(() => {}); }
+      btn.textContent = vid.muted ? "🔇" : "🔊";
+    });
+  });
+
+  // --- lazy load + play only what's in view (respects manual pause) ---
+  function ensureLoaded(vid) {
+    if (!vid.getAttribute("src") && vid.dataset.src) {
+      vid.classList.add("is-loading");
+      vid.addEventListener("loadeddata", () => vid.classList.remove("is-loading"), { once: true });
+      vid.src = vid.dataset.src;
+    }
+  }
+  if ("IntersectionObserver" in window) {
+    // preload videos slightly before they enter the viewport
+    const loadIO = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { ensureLoaded(en.target); loadIO.unobserve(en.target); } });
+    }, { rootMargin: "600px 0px" });
+    // play/pause based on actual visibility
+    const playIO = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        const vid = en.target;
+        if (en.isIntersecting) {
+          ensureLoaded(vid);
+          if (!vid.dataset.userpaused) vid.play().catch(() => {});
+        } else {
+          vid.pause();
+          if (!vid.muted) { vid.muted = true; const b = vid.parentElement.querySelector(".vcard__sound"); if (b) b.textContent = "🔇"; }
+        }
+      });
+    }, { threshold: 0.25 });
+    document.querySelectorAll(".vcard video").forEach((v) => { loadIO.observe(v); playIO.observe(v); });
+
+    // YouTube cards: mount muted/looped embed when near view, tear down when far away
+    const ytIO = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        const m = en.target;
+        if (en.isIntersecting) {
+          if (!m.querySelector("iframe")) mountYT(m, !m.classList.contains("is-sound"));
+        } else {
+          const f = m.querySelector("iframe");
+          if (f && !m.classList.contains("is-sound")) f.remove(); // keep playing if user turned sound on
+        }
+      });
+    }, { rootMargin: "300px 0px" });
+    document.querySelectorAll(".vcard__media--yt").forEach((m) => ytIO.observe(m));
+  } else {
+    document.querySelectorAll(".vcard video").forEach((v) => { ensureLoaded(v); v.play().catch(() => {}); });
+    document.querySelectorAll(".vcard__media--yt").forEach((m) => mountYT(m, true));
+  }
+
+})();
+</script>
+</body>
+</html>

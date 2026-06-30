@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Servicio · FACU PERES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:#0E0E10; --surface:#17171b; --surface-2:#202026;
+  --ink:#F4F3F0; --ink-soft:#8a8a92; --hair:#ffffff14;
+  --accent:#98E245; --fc:#98E245;
+  --font:'Archivo', system-ui, sans-serif; --serif:'Instrument Serif', Georgia, serif; --mono:'Space Mono', monospace;
+  --ph2-bg:#1c1c21; --ph2-line:#232329; --pad:clamp(18px,5vw,72px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.45;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+em{font-family:var(--serif);font-style:italic}
+.mono2{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft)}
+
+/* nav */
+.nav2{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:15px var(--pad);background:#0e0e10cc;backdrop-filter:blur(12px);border-bottom:1px solid var(--hair)}
+.back{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px}
+.back__arrow{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--hair);transition:background .2s,color .2s}
+.back:hover .back__arrow{background:var(--ink);color:#0E0E10}
+.nav2__home{font-size:13px;font-weight:600;color:var(--ink-soft);transition:color .2s}
+.nav2__home:hover{color:var(--ink)}
+
+/* tabs */
+.tabs{display:flex;flex-wrap:wrap;gap:9px;padding:26px var(--pad) 0}
+.tab{padding:9px 16px;border-radius:100px;border:1px solid var(--hair);font-size:13px;font-weight:600;color:var(--ink-soft);transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--ink);border-color:var(--ink-soft)}
+.tab--on{background:var(--tc);border-color:var(--tc);color:#0E0E10}
+
+/* header */
+.shead{padding:30px var(--pad) clamp(34px,5vw,56px);display:flex;flex-direction:column;gap:18px;border-bottom:1px solid var(--hair)}
+.shead__tag{align-self:flex-start;padding:9px 19px;background:var(--fc);color:#0E0E10;font-weight:800;font-size:13px;letter-spacing:.02em;border-radius:100px}
+.shead__title{font-weight:900;font-size:clamp(46px,9vw,128px);line-height:.9;letter-spacing:-.03em}
+.shead__row{display:flex;flex-wrap:wrap;gap:14px 40px;align-items:baseline;justify-content:space-between}
+.shead__desc{max-width:46ch;font-size:clamp(15px,1.6vw,19px);color:var(--ink-soft);line-height:1.5;text-wrap:pretty}
+.shead__count{color:var(--fc) !important;font-size:12px !important}
+
+/* grid of works */
+.works{padding:clamp(40px,6vw,72px) var(--pad) clamp(60px,8vw,110px)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(22px,2.6vw,40px)}
+.tile{display:flex;flex-direction:column;gap:14px;cursor:pointer}
+.tile--link{cursor:pointer}
+.tile__media{position:relative;overflow:hidden;border-radius:7px;border:1px solid var(--hair)}
+.tile__media .ph2{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.tile:hover .tile__media .ph2{transform:scale(1.05)}
+.tile__img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.tile:hover .tile__img{transform:scale(1.05)}
+.tile__open{position:absolute;left:50%;bottom:14px;transform:translate(-50%,8px);background:var(--fc);color:#0E0E10 !important;padding:8px 14px;border-radius:100px;font-weight:700;opacity:0;transition:opacity .25s,transform .25s}
+.tile--link:hover .tile__open{opacity:1;transform:translate(-50%,0)}
+.ph2{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:var(--ph2-bg);display:flex;align-items:flex-end}
+.ph2__s{position:absolute;inset:0;opacity:.6}
+.ph2__tag{position:relative;z-index:1;margin:12px;padding:5px 9px;background:#0e0e10cc;color:var(--ink-soft);font-family:var(--mono);font-size:10px;letter-spacing:.03em;text-transform:uppercase;border:1px solid var(--hair);border-radius:3px}
+.tile__num{position:absolute;top:11px;left:11px;background:#0e0e10cc;border:1px solid var(--hair);padding:4px 8px;border-radius:4px;font-family:var(--mono);font-size:10px;color:var(--ink)}
+.tile__meta{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.tile__title{font-weight:800;font-size:clamp(18px,1.7vw,24px);letter-spacing:-.01em;line-height:1.05}
+.tile__year{font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-transform:uppercase;flex:0 0 auto}
+
+/* cta + footer */
+.cta{padding:clamp(50px,7vw,90px) var(--pad);border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+.cta__big{font-weight:900;font-size:clamp(32px,5vw,68px);line-height:.95;letter-spacing:-.02em}
+.cta__big em{color:var(--accent);text-transform:none}
+.cta__btn{padding:15px 26px;border-radius:100px;background:var(--accent);color:#0E0E10;font-weight:800;font-size:15px;transition:transform .2s}
+.cta__btn:hover{transform:translateY(-2px)}
+.footer2{display:flex;justify-content:space-between;padding:22px var(--pad);border-top:1px solid var(--hair)}
+
+@media(max-width:900px){ .grid3{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:600px){ .grid3{grid-template-columns:1fr} .nav2__home{display:none} }
+</style>
+</head>
+<body>
+<nav class="nav2">
+  <a class="back" href="Portfolio.html#services">
+    <span class="back__arrow">←</span> FACU PERES
+  </a>
+  <a class="nav2__home mono2" href="Portfolio.html">Volver al portfolio</a>
+</nav>
+
+<div class="tabs" id="tabs"></div>
+<header class="shead" id="shead"></header>
+<main class="works">
+  <div class="grid3" id="grid"></div>
+</main>
+
+<section class="cta">
+  <h2 class="cta__big">¿Te interesa este<br /><em>servicio?</em></h2>
+  <a class="cta__btn" href="Portfolio.html#contact">Hablemos →</a>
+</section>
+<footer class="footer2 mono2">
+  <span>© 2026 FACU PERES</span>
+  <span>/FACU.ZIP</span>
+</footer>
+
+<script src="src/data2.js"></script>
+<script>
+(function () {
+  const d = window.FACU;
+  const params = new URLSearchParams(location.search);
+  let id = params.get("s") || d.services[0].id;
+  let svc = d.services.find((s) => s.id === id) || d.services[0];
+
+  // theme accent
+  document.documentElement.style.setProperty("--fc", svc.color);
+  document.documentElement.style.setProperty("--accent", svc.color);
+  document.title = svc.label + " · FACU PERES";
+
+  // tabs
+  document.getElementById("tabs").innerHTML = d.services.map((s) => {
+    let href = "servicio.html?s=" + s.id;
+    if (s.id === "video") href = "servicio-video.html";
+    if (s.id === "social") href = "servicio-social.html";
+    return '<a class="tab' + (s.id === svc.id ? " tab--on" : "") + '" style="--tc:' + s.color + '" href="' + href + '">' + s.label + "</a>";
+  }).join("");
+
+  // header
+  const projs = d.projects.filter((p) => p.service === svc.id);
+  document.getElementById("shead").innerHTML =
+    '<span class="shead__tag">' + svc.short + "</span>" +
+    '<h1 class="shead__title">' + svc.label + "</h1>" +
+    '<div class="shead__row">' +
+      '<p class="shead__desc">' + svc.desc + "</p>" +
+      '<span class="shead__count mono2">' + String(projs.length).padStart(2, "0") + " proyectos</span>" +
+    "</div>";
+
+  // placeholder builder
+  function ph(label, i) {
+    const pid = "p" + svc.id + i;
+    return '<div class="ph2" role="img" aria-label="' + label + '">' +
+      '<svg class="ph2__s" width="100%" height="100%" preserveAspectRatio="none">' +
+        "<defs><pattern id='" + pid + "' width='16' height='16' patternTransform='rotate(45)' patternUnits='userSpaceOnUse'>" +
+        "<rect width='16' height='16' fill='var(--ph2-bg)'/><rect width='8' height='16' fill='var(--ph2-line)'/></pattern></defs>" +
+        "<rect width='100%' height='100%' fill='url(#" + pid + ")'/>" +
+      "</svg>" +
+      '<span class="ph2__tag">' + label + "</span></div>";
+  }
+  function media(p, i) {
+    if (p.cover) return '<img class="tile__img" src="' + p.cover + '" alt="' + p.title + '" loading="lazy" />';
+    return ph(p.slot, i);
+  }
+  function hasPage(p) { return p.media && p.media.length; }
+
+  // grid
+  document.getElementById("grid").innerHTML = projs.map((p, i) => {
+    const inner =
+      '<div class="tile__media">' + media(p, i) + '<span class="tile__num">' + String(i + 1).padStart(2, "0") + "</span>" +
+        (hasPage(p) ? '<span class="tile__open mono2">Ver proyecto →</span>' : "") + "</div>" +
+      '<div class="tile__meta"><h3 class="tile__title">' + p.title + '</h3><span class="tile__year">' + p.year + "</span></div>";
+    return hasPage(p)
+      ? '<a class="tile tile--link" href="proyecto.html?p=' + p.id + '">' + inner + "</a>"
+      : '<article class="tile">' + inner + "</article>";
+  }).join("");
+})();
+</script>
+</body>
+</html>
