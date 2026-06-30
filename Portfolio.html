@@ -507,22 +507,39 @@ const STICKERS = [
   { id: "b_grid",     kind: "badge", icon: "grid",   color: "#ADE6ED", x: 91, y: 14, rot: 0 },
 ];
 
-const SKEY = "facu_stickers_v3";
+// positions tuned for narrow/tall mobile hero so nothing overlaps the name or spills off-screen
+const STICKERS_MOBILE = [
+  { id: "c_branding", kind: "chip", text: "Branding e Identidad", service: "branding", color: "#2087E4", dark: true, x: 6,  y: 18, rot: -6 },
+  { id: "c_web",      kind: "chip", text: "Diseño web",          service: "web",      color: "#98E245", x: 4,  y: 42, rot: 5 },
+  { id: "c_video",    kind: "chip", text: "Edición de video",     service: "video",    color: "#FE572A", dark: true, x: 38, y: 7,  rot: 6 },
+  { id: "c_social",   kind: "chip", text: "Redes y anuncios",    service: "social",   color: "#ADE6ED", x: 30, y: 58, rot: -7 },
+  { id: "b_cursor",   kind: "badge", icon: "cursor", color: "#2087E4", x: 84, y: 28, rot: 0 },
+  { id: "b_pen",      kind: "badge", icon: "pen",    color: "#ADE6ED", x: 82, y: 62, rot: -6 },
+  { id: "b_pencil",   kind: "badge", icon: "pencil", color: "#C9A8FF", x: 12, y: 4,  rot: 4 },
+  { id: "b_bucket",   kind: "badge", icon: "bucket", color: "#98E245", x: 80, y: 86, rot: 8 },
+  { id: "b_play",     kind: "badge", icon: "play",   color: "#FE572A", x: 8,  y: 70, rot: -4 },
+  { id: "b_grid",     kind: "badge", icon: "grid",   color: "#ADE6ED", x: 78, y: 6,  rot: 0 },
+];
+
+const SKEY = "facu_stickers_v4";
 
 function StickerLayer({ onFilter }) {
   const layerRef = useR(null);
   const [pos, setPos] = useS({});
   const [z, setZ] = useS(50);
   const drag = useR(null);
+  const listRef = useR(STICKERS);
 
   useE(() => {
     const el = layerRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
+    const list = window.innerWidth < 700 ? STICKERS_MOBILE : STICKERS;
+    listRef.current = list;
     let saved = {};
     try { saved = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) {}
     const next = {};
-    STICKERS.forEach((s) => {
+    list.forEach((s) => {
       // saved as % so positions scale to any screen size
       if (saved[s.id] && saved[s.id].px != null) {
         next[s.id] = { x: (saved[s.id].px / 100) * r.width, y: (saved[s.id].py / 100) * r.height, z: 50 };
@@ -582,7 +599,7 @@ function StickerLayer({ onFilter }) {
 
   return (
     <div className="stickers" ref={layerRef}>
-      {STICKERS.map((s) => {
+      {listRef.current.map((s) => {
         const p = pos[s.id] || { x: 0, y: 0, z: 50 };
         const cls = "stk stk--" + s.kind + (p.dragging ? " stk--drag" : "") + (p.pressed ? " stk--press" : "") + (s.service ? " stk--svc" : "");
         let transform;
