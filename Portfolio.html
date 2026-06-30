@@ -789,7 +789,8 @@ function Projects({ d, auto }) {
     tr.style.transform = "translateX(" + s.baseX + "px)";
     const move = (ev) => {
       if (!s.down) return;
-      s.moved += Math.abs(ev.movementX || 0);
+      // real distance from the touch/click start, not summed jitter (touch fires many tiny pointermoves even when held still)
+      s.moved = Math.max(s.moved, Math.abs(ev.clientX - s.sx));
       tr.style.transform = "translateX(" + (s.baseX + (ev.clientX - s.sx)) + "px)";
     };
     const up = () => {
@@ -872,7 +873,6 @@ function About2({ d }) {
         <div className="about2__photo">
           <img src="assets/facu.jpg" alt="Facu Peres" loading="lazy"
                onError={(e) => { e.target.style.display='none'; }} />
-          <span className="about2__cap mono2">Facu Peres · 2025</span>
         </div>
         <div className="about2__col">
           <p className="about2__lead">{d.about}</p>
