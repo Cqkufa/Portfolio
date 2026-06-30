@@ -77,9 +77,9 @@ em{font-family:var(--serif);font-style:italic;font-weight:400}
 .stk--press{transition:transform .07s ease}
 .stk--drag{cursor:grabbing;transition:none;box-shadow:0 18px 44px #000a;z-index:999}
 .stk--svc{cursor:pointer}
-.stk--chip{padding:14px 26px;border-radius:100px;font-weight:800;font-size:18px;white-space:nowrap}
+.stk--chip{padding:clamp(8px,1.8vw,14px) clamp(14px,3.2vw,26px);border-radius:100px;font-weight:800;font-size:clamp(12px,2.8vw,18px);white-space:nowrap}
 .stk__arrow{opacity:.55}
-.stk--badge{width:62px;height:62px;border-radius:50%;display:grid;place-items:center}
+.stk--badge{width:clamp(44px,8vw,62px);height:clamp(44px,8vw,62px);border-radius:50%;display:grid;place-items:center}
 .stk__ico{display:grid;place-items:center}
 @keyframes pop{0%{opacity:0;transform:rotate(var(--rot)) scale(.4)}70%{transform:rotate(var(--rot)) scale(1.12)}100%{opacity:1;transform:rotate(var(--rot)) scale(1)}}
 
@@ -174,8 +174,6 @@ em{font-family:var(--serif);font-style:italic;font-weight:400}
 @media(min-width:760px){ .nav2__mid{display:block} }
 @media(max-width:560px){
   .nav2__links button:not(.nav2__cta){display:none}
-  .stk--badge{width:46px;height:46px}
-  .stk--chip{font-size:12px;padding:7px 13px}
   .services__grid{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
@@ -525,16 +523,25 @@ function StickerLayer({ onFilter }) {
     try { saved = JSON.parse(localStorage.getItem(SKEY) || "{}"); } catch (e) {}
     const next = {};
     STICKERS.forEach((s) => {
-      if (saved[s.id]) next[s.id] = { x: saved[s.id].x, y: saved[s.id].y, z: 50 };
-      else next[s.id] = { x: (s.x / 100) * r.width, y: (s.y / 100) * r.height, z: 50 };
+      // saved as % so positions scale to any screen size
+      if (saved[s.id] && saved[s.id].px != null) {
+        next[s.id] = { x: (saved[s.id].px / 100) * r.width, y: (saved[s.id].py / 100) * r.height, z: 50 };
+      } else {
+        next[s.id] = { x: (s.x / 100) * r.width, y: (s.y / 100) * r.height, z: 50 };
+      }
     });
     setPos(next);
   }, []);
 
   const persist = (next) => {
     try {
+      const el = layerRef.current;
+      const r = el ? el.getBoundingClientRect() : { width: 1, height: 1 };
       const out = {};
-      Object.keys(next).forEach((k) => (out[k] = { x: next[k].x, y: next[k].y }));
+      Object.keys(next).forEach((k) => (out[k] = {
+        px: (next[k].x / r.width) * 100,
+        py: (next[k].y / r.height) * 100,
+      }));
       localStorage.setItem(SKEY, JSON.stringify(out));
     } catch (e) {}
   };
