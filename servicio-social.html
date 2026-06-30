@@ -77,10 +77,17 @@ em{font-family:var(--serif);font-style:italic}
 .cta__btn:hover{transform:translateY(-2px)}
 .footer2{display:flex;justify-content:space-between;padding:22px var(--pad);border-top:1px solid var(--hair)}
 
-@media(max-width:600px){
+@media(max-width:700px){
   .nav2__home{display:none}
-  .car__nav--prev{left:6px}
-  .car__nav--next{right:6px}
+  .frames{flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;justify-content:flex-start;
+    padding:4px var(--pad) 20px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;margin:0 calc(-1 * var(--pad))}
+  .frames::-webkit-scrollbar{display:none}
+  .frame{scroll-snap-align:start;flex-shrink:0}
+  .frame--story .shot{width:min(200px,52vw)}
+  .frame--feed .shot{width:min(200px,52vw)}
+  .frame--ad .shot{width:min(200px,52vw)}
+  .posts{padding:0}
 }
 </style>
 </head>
