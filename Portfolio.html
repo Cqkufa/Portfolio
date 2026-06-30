@@ -652,7 +652,7 @@ function Hero2({ d, onNav, onFilter }) {
     <section className="hero2" id="top">
       <StickerLayer onFilter={onFilter} />
       <div className="hero2__inner">
-        <span className="hero2__eyebrow mono2">Portfolio · Vol. 1 · 2025</span>
+        <span className="hero2__eyebrow" style={{fontFamily:"var(--mono)",fontSize:"10px",letterSpacing:".04em",textTransform:"uppercase",color:"var(--ink-soft)",opacity:.35}}>che, si estás aburrido cambiá los stickers de lugar</span>
         <h1 className="hero2__name">
           {d.name.split(" ").map((w, i) => (
             <span className="hero2__word" style={{ "--i": i }} key={i}>{w}</span>
