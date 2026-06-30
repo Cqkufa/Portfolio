@@ -77,17 +77,24 @@ em{font-family:var(--serif);font-style:italic}
 .cta__btn:hover{transform:translateY(-2px)}
 .footer2{display:flex;justify-content:space-between;padding:22px var(--pad);border-top:1px solid var(--hair)}
 
+/* lightbox */
+.lb{display:none;position:fixed;inset:0;z-index:999;background:#000c;align-items:center;justify-content:center;padding:20px}
+.lb--on{display:flex}
+.lb__img{max-width:100%;max-height:90dvh;object-fit:contain;border-radius:10px;box-shadow:0 24px 80px #0009}
+.lb__close{position:fixed;top:18px;right:18px;width:40px;height:40px;border-radius:50%;background:#ffffff22;border:1px solid #ffffff33;color:#fff;font-size:20px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(6px)}
+
 @media(max-width:700px){
   .nav2__home{display:none}
-  .frames{flex-wrap:nowrap;overflow-x:auto;overflow-y:visible;justify-content:flex-start;
-    padding:4px var(--pad) 20px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
-    scrollbar-width:none;margin:0 calc(-1 * var(--pad))}
-  .frames::-webkit-scrollbar{display:none}
-  .frame{scroll-snap-align:start;flex-shrink:0}
-  .frame--story .shot{width:min(200px,52vw)}
-  .frame--feed .shot{width:min(200px,52vw)}
-  .frame--ad .shot{width:min(200px,52vw)}
   .posts{padding:0}
+  .frames{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;
+    padding:4px 0 20px var(--pad);gap:14px;
+    scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .frames::-webkit-scrollbar{display:none}
+  .frames::after{content:"";flex:0 0 var(--pad);display:block}
+  .frame{scroll-snap-align:start;flex-shrink:0}
+  .frame--story .shot{width:min(180px,48vw)}
+  .frame--feed .shot{width:min(180px,48vw)}
+  .frame--ad .shot{width:min(180px,48vw)}
 }
 </style>
 </head>
@@ -112,6 +119,26 @@ em{font-family:var(--serif);font-style:italic}
   <span>© 2026 FACU PERES</span>
   <span>/FACU.ZIP</span>
 </footer>
+
+<!-- lightbox -->
+<div class="lb" id="lb" onclick="closeLB()">
+  <button class="lb__close" onclick="closeLB()">✕</button>
+  <img class="lb__img" id="lb-img" src="" alt="" onclick="event.stopPropagation()" />
+</div>
+<script>
+function openLB(src) {
+  var lb = document.getElementById('lb');
+  var img = document.getElementById('lb-img');
+  img.src = src;
+  lb.classList.add('lb--on');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB() {
+  document.getElementById('lb').classList.remove('lb--on');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeLB(); });
+</script>
 
 <script src="src/data2.js"></script>
 <script>
@@ -141,13 +168,11 @@ em{font-family:var(--serif);font-style:italic}
 
   // build one post block: story + feed shots
   function postBlock(p) {
-    const stories = (p.stories || (p.story ? [p.story] : [])).map((src, i) =>
-      '<div class="frame frame--story">' +
-        '<div class="shot"><img src="' + src + '" alt="' + p.title + ' historia" loading="lazy" /></div></div>'
+    const stories = (p.stories || (p.story ? [p.story] : [])).map((src) =>
+      '<div class="frame frame--story">' + shotImg(src, p.title + ' historia') + '</div>'
     ).join("");
-    const feed = (p.feed || []).map((src, i) =>
-      '<div class="frame frame--feed">' +
-        '<div class="shot"><img src="' + src + '" alt="' + p.title + ' feed" loading="lazy" /></div></div>'
+    const feed = (p.feed || []).map((src) =>
+      '<div class="frame frame--feed">' + shotImg(src, p.title + ' feed') + '</div>'
     ).join("");
     return '<article class="post">' +
       '<div class="post__head"><span class="post__name">' + p.title + "</span>" +
@@ -159,9 +184,8 @@ em{font-family:var(--serif);font-style:italic}
 
   // build one ad block: 1:1 shots
   function adBlock(p) {
-    const shots = (p.shots || []).map((src, i) =>
-      '<div class="frame frame--ad">' +
-        '<div class="shot"><img src="' + src + '" alt="' + p.title + ' anuncio" loading="lazy" /></div></div>'
+    const shots = (p.shots || []).map((src) =>
+      '<div class="frame frame--ad">' + shotImg(src, p.title + ' anuncio') + '</div>'
     ).join("");
     return '<article class="post">' +
       '<div class="post__head"><span class="post__name">' + p.title + "</span>" +
@@ -169,6 +193,11 @@ em{font-family:var(--serif);font-style:italic}
       "</div>" +
       '<div class="frames">' + shots + "</div>" +
     "</article>";
+  }
+
+  // make shots clickable — wrap img in a button that opens lightbox
+  function shotImg(src, alt) {
+    return '<div class="shot" onclick="openLB(\'' + src + '\')" style="cursor:zoom-in"><img src="' + src + '" alt="' + alt + '" loading="lazy" /></div>';
   }
 
   const ads = (d.social && d.social.ads) || [];
